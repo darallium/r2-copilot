@@ -1,0 +1,42 @@
+
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.13'
+
+    - name: Install uv
+      run: |
+        curl -LsSf https://astral.sh/uv/install.sh | sh
+        echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+
+    - name: Install dependencies
+      run: |
+        uv pip install .[dev]
+
+    - name: Lint with flake8
+      run: |
+        uv run flake8 src
+
+    - name: Check formatting with black and isort
+      run: |
+        uv run black --check .
+        uv run isort --check .
+
+    - name: Test with pytest
+      run: |
+        uv run pytest

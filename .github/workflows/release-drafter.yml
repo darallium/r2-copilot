@@ -1,0 +1,26 @@
+name: Release Drafter
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  update_release_draft:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate CalVer version
+        id: calver
+        run: |
+          export VERSION=$"v$(date "+%Y%m%d%H%M%S")"
+          echo ::set-output name=version::${VERSION}
+
+      - uses: release-drafter/release-drafter@v6
+        with:
+          publish: true
+          config-name: release-drafter.yml
+          tag: ${{ steps.calver.outputs.version }}
+          name: ${{ steps.calver.outputs.version }}
+          version: ${{ steps.calver.outputs.version }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
