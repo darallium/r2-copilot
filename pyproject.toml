@@ -1,0 +1,21 @@
+[project]
+name = "radare2-mcp"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "fastmcp>=2.11.3",
+    "mcp[cli]>=1.13.0",
+    "pydantic>=2.11.7",
+    "r2pipe>=1.9.6",
+]
+
+[dependency-groups]
+dev = [
+    "black>=25.1.0",
+    "flake8>=7.3.0",
+    "isort>=6.0.1",
+    "pytest>=8.4.1",
+    "pytest-asyncio>=1.1.0",
+]
