@@ -1,26 +1,25 @@
 """Disassembly and print tools for Radare2 MCP server."""
 
-from typing import List, Optional, Dict, Any, Union
-from radare2_mcp.utils.r2_manager import r2_manager
+import json
+import logging
+from typing import List, Optional, Union
+
 from radare2_mcp.models.schemas import (
     Address,
     DisassemblyLine,
     OutputFormat,
 )
-import json
-import logging
+from radare2_mcp.utils.r2_manager import r2_manager
 
 logger = logging.getLogger(__name__)
 
 
 class DisassemblyTools:
     """Radare2 disassembly and print commands."""
-    
+
     @staticmethod
     async def disassemble(
-        count: int = 10,
-        address: Optional[Address] = None,
-        session_id: Optional[str] = None
+        count: int = 10, address: Optional[Address] = None, session_id: Optional[str] = None
     ) -> List[DisassemblyLine]:
         """
         Disassemble N instructions.
@@ -33,32 +32,33 @@ class DisassemblyTools:
                     cmd = f"pdj {count} @ {address.value}"
                 else:
                     cmd = f"pdj {count} @ {address.value:#x}"
-            
+
             disasm = r2_manager.execute_command(cmd, session_id)
             if isinstance(disasm, str):
                 disasm = json.loads(disasm)
-            
+
             lines = []
             for line in disasm:
-                lines.append(DisassemblyLine(
-                    offset=line.get("offset", 0),
-                    size=line.get("size", 0),
-                    opcode=line.get("opcode", ""),
-                    bytes=line.get("bytes", ""),
-                    instruction=line.get("disasm", ""),
-                    comment=line.get("comment"),
-                    xrefs=line.get("xrefs"),
-                    flags=line.get("flags")
-                ))
+                lines.append(
+                    DisassemblyLine(
+                        offset=line.get("offset", 0),
+                        size=line.get("size", 0),
+                        opcode=line.get("opcode", ""),
+                        bytes=line.get("bytes", ""),
+                        instruction=line.get("disasm", ""),
+                        comment=line.get("comment"),
+                        xrefs=line.get("xrefs"),
+                        flags=line.get("flags"),
+                    )
+                )
             return lines
         except Exception as e:
             logger.error(f"Failed to disassemble: {e}")
             return []
-    
+
     @staticmethod
     async def disassemble_function(
-        address: Optional[Address] = None,
-        session_id: Optional[str] = None
+        address: Optional[Address] = None, session_id: Optional[str] = None
     ) -> List[DisassemblyLine]:
         """
         Disassemble function.
@@ -71,36 +71,36 @@ class DisassemblyTools:
                     cmd = f"pdfj @ {address.value}"
                 else:
                     cmd = f"pdfj @ {address.value:#x}"
-            
+
             disasm = r2_manager.execute_command(cmd, session_id)
             if isinstance(disasm, str):
                 disasm = json.loads(disasm)
-            
+
             # pdf returns ops array
             ops = disasm.get("ops", []) if isinstance(disasm, dict) else disasm
-            
+
             lines = []
             for op in ops:
-                lines.append(DisassemblyLine(
-                    offset=op.get("offset", 0),
-                    size=op.get("size", 0),
-                    opcode=op.get("opcode", ""),
-                    bytes=op.get("bytes", ""),
-                    instruction=op.get("disasm", ""),
-                    comment=op.get("comment"),
-                    xrefs=op.get("xrefs"),
-                    flags=op.get("flags")
-                ))
+                lines.append(
+                    DisassemblyLine(
+                        offset=op.get("offset", 0),
+                        size=op.get("size", 0),
+                        opcode=op.get("opcode", ""),
+                        bytes=op.get("bytes", ""),
+                        instruction=op.get("disasm", ""),
+                        comment=op.get("comment"),
+                        xrefs=op.get("xrefs"),
+                        flags=op.get("flags"),
+                    )
+                )
             return lines
         except Exception as e:
             logger.error(f"Failed to disassemble function: {e}")
             return []
-    
+
     @staticmethod
     async def print_hex(
-        size: int = 64,
-        address: Optional[Address] = None,
-        session_id: Optional[str] = None
+        size: int = 64, address: Optional[Address] = None, session_id: Optional[str] = None
     ) -> str:
         """
         Print hexdump.
@@ -113,17 +113,15 @@ class DisassemblyTools:
                     cmd = f"px {size} @ {address.value}"
                 else:
                     cmd = f"px {size} @ {address.value:#x}"
-            
+
             return r2_manager.execute_command(cmd, session_id)
         except Exception as e:
             logger.error(f"Failed to print hex: {e}")
             return ""
-    
+
     @staticmethod
     async def print_string(
-        address: Address,
-        length: Optional[int] = None,
-        session_id: Optional[str] = None
+        address: Address, length: Optional[int] = None, session_id: Optional[str] = None
     ) -> str:
         """
         Print zero-terminated string.
@@ -134,20 +132,18 @@ class DisassemblyTools:
                 cmd = f"psz @ {address.value}"
             else:
                 cmd = f"psz @ {address.value:#x}"
-            
+
             if length:
                 cmd = f"ps {length} @ {address.value}"
-            
+
             return r2_manager.execute_command(cmd, session_id)
         except Exception as e:
             logger.error(f"Failed to print string: {e}")
             return ""
-    
+
     @staticmethod
     async def print_instructions(
-        count: int = 10,
-        address: Optional[Address] = None,
-        session_id: Optional[str] = None
+        count: int = 10, address: Optional[Address] = None, session_id: Optional[str] = None
     ) -> List[str]:
         """
         Print instructions only (no addresses, xrefs).
@@ -160,19 +156,19 @@ class DisassemblyTools:
                     cmd = f"pi {count} @ {address.value}"
                 else:
                     cmd = f"pi {count} @ {address.value:#x}"
-            
+
             result = r2_manager.execute_command(cmd, session_id)
-            return result.strip().split('\n') if result else []
+            return result.strip().split("\n") if result else []
         except Exception as e:
             logger.error(f"Failed to print instructions: {e}")
             return []
-    
+
     @staticmethod
     async def print_bytes(
         count: int = 16,
         address: Optional[Address] = None,
         format: OutputFormat = OutputFormat.HEX,
-        session_id: Optional[str] = None
+        session_id: Optional[str] = None,
     ) -> Union[str, bytes]:
         """
         Print N bytes in various formats.
@@ -187,27 +183,25 @@ class DisassemblyTools:
                 cmd = f"pc {count}"
             else:
                 cmd = f"p8 {count}"
-            
+
             if address:
                 if isinstance(address.value, str):
                     cmd = f"{cmd} @ {address.value}"
                 else:
                     cmd = f"{cmd} @ {address.value:#x}"
-            
+
             result = r2_manager.execute_command(cmd, session_id)
-            
+
             if format == OutputFormat.HEX and result:
                 return bytes.fromhex(result.strip())
             return result
         except Exception as e:
             logger.error(f"Failed to print bytes: {e}")
             return b"" if format == OutputFormat.HEX else ""
-    
+
     @staticmethod
     async def print_words(
-        count: int = 8,
-        address: Optional[Address] = None,
-        session_id: Optional[str] = None
+        count: int = 8, address: Optional[Address] = None, session_id: Optional[str] = None
     ) -> str:
         """
         Print hexdump of N words.
@@ -220,17 +214,15 @@ class DisassemblyTools:
                     cmd = f"pxw {count * 4} @ {address.value}"
                 else:
                     cmd = f"pxw {count * 4} @ {address.value:#x}"
-            
+
             return r2_manager.execute_command(cmd, session_id)
         except Exception as e:
             logger.error(f"Failed to print words: {e}")
             return ""
-    
+
     @staticmethod
     async def print_disassembled_bytes(
-        size: int = 32,
-        address: Optional[Address] = None,
-        session_id: Optional[str] = None
+        size: int = 32, address: Optional[Address] = None, session_id: Optional[str] = None
     ) -> str:
         """
         Print N bytes disassembled.
@@ -243,16 +235,15 @@ class DisassemblyTools:
                     cmd = f"pD {size} @ {address.value}"
                 else:
                     cmd = f"pD {size} @ {address.value:#x}"
-            
+
             return r2_manager.execute_command(cmd, session_id)
         except Exception as e:
             logger.error(f"Failed to print disassembled bytes: {e}")
             return ""
-    
+
     @staticmethod
     async def print_entropy(
-        address: Optional[Address] = None,
-        session_id: Optional[str] = None
+        address: Optional[Address] = None, session_id: Optional[str] = None
     ) -> str:
         """
         Print entropy graph.
@@ -265,7 +256,7 @@ class DisassemblyTools:
                     cmd = f"p= @ {address.value}"
                 else:
                     cmd = f"p= @ {address.value:#x}"
-            
+
             return r2_manager.execute_command(cmd, session_id)
         except Exception as e:
             logger.error(f"Failed to print entropy: {e}")

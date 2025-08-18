@@ -1,12 +1,14 @@
 """Pydantic models for Radare2 MCP server."""
 
-from typing import Any, Dict, List, Optional, Union
-from pydantic import BaseModel, Field, validator
 from enum import Enum
+from typing import Any, List, Optional, Union
+
+from pydantic import BaseModel, validator
 
 
 class OutputFormat(str, Enum):
     """Output format options."""
+
     JSON = "json"
     TEXT = "text"
     HEX = "hex"
@@ -17,6 +19,7 @@ class OutputFormat(str, Enum):
 
 class Architecture(str, Enum):
     """Supported architectures."""
+
     X86 = "x86"
     X86_64 = "x86.64"
     ARM = "arm"
@@ -29,6 +32,7 @@ class Architecture(str, Enum):
 
 class R2Session(BaseModel):
     """Radare2 session information."""
+
     session_id: str
     file_path: Optional[str] = None
     pid: Optional[int] = None
@@ -41,8 +45,9 @@ class R2Session(BaseModel):
 
 class Address(BaseModel):
     """Address representation."""
+
     value: Union[int, str]
-    
+
     @validator("value")
     def validate_address(cls, v):
         if isinstance(v, str):
@@ -61,6 +66,7 @@ class Address(BaseModel):
 
 class AnalysisResult(BaseModel):
     """Analysis operation result."""
+
     success: bool
     functions_found: Optional[int] = None
     basic_blocks: Optional[int] = None
@@ -70,6 +76,7 @@ class AnalysisResult(BaseModel):
 
 class FunctionInfo(BaseModel):
     """Function information."""
+
     name: str
     offset: int
     size: int
@@ -85,6 +92,7 @@ class FunctionInfo(BaseModel):
 
 class SectionInfo(BaseModel):
     """Binary section information."""
+
     name: str
     size: int
     vsize: int
@@ -96,6 +104,7 @@ class SectionInfo(BaseModel):
 
 class SymbolInfo(BaseModel):
     """Symbol information."""
+
     name: str
     offset: int
     size: int
@@ -106,6 +115,7 @@ class SymbolInfo(BaseModel):
 
 class StringInfo(BaseModel):
     """String information."""
+
     offset: int
     length: int
     type: str
@@ -115,10 +125,11 @@ class StringInfo(BaseModel):
 
 class RegisterState(BaseModel):
     """CPU register state."""
+
     name: str
     value: int
     size: int
-    
+
     @property
     def hex_value(self) -> str:
         return f"0x{self.value:x}"
@@ -126,6 +137,7 @@ class RegisterState(BaseModel):
 
 class Breakpoint(BaseModel):
     """Breakpoint information."""
+
     address: int
     size: int = 1
     enabled: bool = True
@@ -136,6 +148,7 @@ class Breakpoint(BaseModel):
 
 class MemoryMap(BaseModel):
     """Memory mapping information."""
+
     start: int
     end: int
     size: int
@@ -146,6 +159,7 @@ class MemoryMap(BaseModel):
 
 class DisassemblyLine(BaseModel):
     """Single disassembly line."""
+
     offset: int
     size: int
     opcode: str
@@ -158,11 +172,12 @@ class DisassemblyLine(BaseModel):
 
 class SearchResult(BaseModel):
     """Search result."""
+
     offset: int
     size: int
     data: bytes
     string: Optional[str] = None
-    
+
     @property
     def hex_data(self) -> str:
         return self.data.hex()
@@ -170,11 +185,12 @@ class SearchResult(BaseModel):
 
 class ROPGadget(BaseModel):
     """ROP gadget information."""
+
     offset: int
     instructions: List[str]
     size: int
     ending: str  # e.g., "ret", "jmp eax"
-    
+
     @property
     def assembly(self) -> str:
         return "; ".join(self.instructions)
@@ -182,11 +198,12 @@ class ROPGadget(BaseModel):
 
 class WriteOperation(BaseModel):
     """Write operation details."""
+
     offset: int
     data: Union[bytes, str]
     size: Optional[int] = None
     operation: Optional[str] = None  # e.g., "xor", "add"
-    
+
     @validator("data")
     def validate_data(cls, v):
         if isinstance(v, str):
@@ -199,6 +216,7 @@ class WriteOperation(BaseModel):
 
 class Flag(BaseModel):
     """Flag (label) information."""
+
     name: str
     offset: int
     size: int = 1
@@ -207,6 +225,7 @@ class Flag(BaseModel):
 
 class ConfigProperty(BaseModel):
     """Configuration property."""
+
     key: str
     value: Any
     type: str

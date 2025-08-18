@@ -28,14 +28,15 @@ jobs:
       run: |
         uv sync
 
-    - name: Lint with flake8
+    - name: Lint with ruff
       run: |
-        uv run flake8 src
+        uv run ruff check src 
 
     - name: Check formatting with black and isort
       run: |
         uv run black --check .
         uv run isort --check .
+
 
     - name: Test with pytest
       run: |
