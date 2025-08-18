@@ -10,9 +10,9 @@ from mcp.types import TextContent
 
 from radare2_mcp.utils.r2_manager import r2_manager
 from radare2_mcp.models.schemas import (
-    Aradare2_mcpddress, 
-    Oradare2_mcputputFormat,
-    Rradare2_mcp2Session,
+    Address, 
+    OutputFormat,
+    R2Session,
 )
 from radare2_mcp.tools.analysis import AnalysisTools
 from radare2_mcp.tools.binary_info import BinaryInfoTools

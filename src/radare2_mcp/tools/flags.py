@@ -161,4 +161,4 @@ class FlagTools:
             return True
         except Exception as e:
             logger.error(f"Failed to change flag space: {e}")
-            return False:e 
+            return False

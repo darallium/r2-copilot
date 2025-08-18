@@ -828,7 +828,7 @@ sdist = { url = "https://files.pythonhosted.org/packages/53/1c/674d70acdc1a03099
 [[package]]
 name = "radare2-mcp"
 version = "0.1.0"
-source = { virtual = "." }
+source = { editable = "." }
 dependencies = [
     { name = "fastmcp" },
     { name = "mcp", extra = ["cli"] },
