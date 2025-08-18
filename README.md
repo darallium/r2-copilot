@@ -1,3 +1,5 @@
+[English](README.en.md)
+
 # radare2-mcp-server
 
 `radare2-mcp-server` は、強力なリバースエンジニアリングフレームワークである [radare2](https://github.com/radare/radare2) のための Multi-Agent Collaboration Protocol (MCP) サーバーです。
