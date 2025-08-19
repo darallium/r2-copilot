@@ -1,10 +1,11 @@
 """Pytest configuration and fixtures for Radare2 MCP tests."""
 
-import pytest
-import tempfile
 import os
 import sys
+import tempfile
 from pathlib import Path
+
+import pytest
 
 # Add src to path
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
@@ -37,12 +38,12 @@ def sample_binary():
         "4000000000000000"  # program header offset
         "0000000000000000"  # section header offset
         "00000000"  # flags
-        "4000"      # ELF header size
-        "3800"      # program header size
-        "0100"      # program header count
-        "0000"      # section header size
-        "0000"      # section header count
-        "0000"      # section header string index
+        "4000"  # ELF header size
+        "3800"  # program header size
+        "0100"  # program header count
+        "0000"  # section header size
+        "0000"  # section header count
+        "0000"  # section header string index
         # Program header (PT_LOAD)
         "01000000"  # type: PT_LOAD
         "05000000"  # flags: R+X
@@ -55,15 +56,15 @@ def sample_binary():
         # Code (at offset 0x78)
         "b801000000"  # mov eax, 1 (sys_exit)
         "bb00000000"  # mov ebx, 0 (exit code)
-        "cd80"        # int 0x80
+        "cd80"  # int 0x80
     )
-    
+
     with tempfile.NamedTemporaryFile(suffix=".bin", delete=False) as f:
         f.write(elf_bytes)
         temp_path = f.name
-    
+
     yield temp_path
-    
+
     # Cleanup
     try:
         os.unlink(temp_path)
@@ -98,13 +99,13 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 """
-    
-    with tempfile.NamedTemporaryFile(mode='w', suffix=".c", delete=False) as f:
+
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".c", delete=False) as f:
         f.write(source)
         temp_path = f.name
-    
+
     yield temp_path
-    
+
     # Cleanup
     try:
         os.unlink(temp_path)
@@ -116,23 +117,23 @@ int main(int argc, char *argv[]) {
 def compiled_test_binary(test_c_source):
     """Compile the test C source into a binary."""
     import subprocess
-    
+
     output_file = tempfile.mktemp(suffix=".out")
-    
+
     try:
         # Try to compile with gcc
         result = subprocess.run(
             ["gcc", "-o", output_file, "-fno-stack-protector", "-no-pie", test_c_source],
-            capture_output=True
+            capture_output=True,
         )
-        
+
         if result.returncode != 0:
             # If compilation fails, return None
             pytest.skip("GCC not available or compilation failed")
             return None
-            
+
         yield output_file
-        
+
     finally:
         # Cleanup
         try:
@@ -146,9 +147,7 @@ def compiled_test_binary(test_c_source):
 async def test_session(r2_manager, sample_binary):
     """Create a test session with a sample binary."""
     session = r2_manager.create_session(
-        session_id="test_session",
-        file_path=sample_binary,
-        write_mode=False
+        session_id="test_session", file_path=sample_binary, write_mode=False
     )
     yield session
     r2_manager.close_session("test_session")
@@ -177,5 +176,5 @@ def mock_data():
             {"offset": 0x401234, "instructions": ["pop rdi", "ret"]},
             {"offset": 0x401345, "instructions": ["pop rsi", "pop rdx", "ret"]},
             {"offset": 0x401456, "instructions": ["mov rax, rdi", "ret"]},
-        ]
+        ],
     }
