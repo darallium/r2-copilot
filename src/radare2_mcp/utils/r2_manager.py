@@ -15,10 +15,22 @@ logger = logging.getLogger(__name__)
 class R2Manager:
     """Manages Radare2 sessions through r2pipe."""
 
+    _instance = None
+
+    def __new__(cls):
+        """Singleton pattern to ensure single instance."""
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+            cls._instance._initialized = False
+        return cls._instance
+
     def __init__(self):
+        if self._initialized:
+            return
         self.sessions: Dict[str, r2pipe.open_sync.open] = {}
         self.session_info: Dict[str, R2Session] = {}
         self.current_session: Optional[str] = None
+        self._initialized = True
 
     def create_session(
         self,
@@ -161,6 +173,7 @@ class R2Manager:
         arch_map = {
             "x86": Architecture.X86,
             "x86_64": Architecture.X86_64,
+            "x86.64": Architecture.X86_64,
             "arm": Architecture.ARM,
             "arm64": Architecture.ARM64,
             "mips": Architecture.MIPS,
@@ -169,8 +182,11 @@ class R2Manager:
             "wasm": Architecture.WASM,
         }
 
+        # Normalize the architecture string
+        arch_lower = arch_str.lower().replace(" ", "").replace("-", "")
+
         for key, value in arch_map.items():
-            if key in arch_str.lower():
+            if key.replace(".", "") in arch_lower or arch_lower in key.replace(".", ""):
                 return value
 
         return None
