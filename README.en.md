@@ -4,6 +4,10 @@
 
 `r2-copilot` is a Multi-Agent Collaboration Protocol (MCP) server for the powerful reverse engineering framework, [radare2](https://github.com/radare/radare2).
 
+If you are looking to use radare2 llm tools:
+* **r2mcp** - the [official radare2 mcp](https://github.com/radareorg/radare2-mcp)
+* **r2ai** - the [official r2ai](https://github.com/radareorg/r2ai)
+
 ## Installation
 
 1.  Clone the repository
