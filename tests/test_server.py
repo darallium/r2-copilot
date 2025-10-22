@@ -94,7 +94,8 @@ class TestMCPServer:
         session = await server.create_session(file_path=sample_binary, session_name="search_test")
 
         results = await server.search_bytes(
-            pattern="7f454c46", session_id="search_test"  # ELF magic
+            pattern="7f454c46",
+            session_id="search_test",  # ELF magic
         )
 
         assert isinstance(results, list)

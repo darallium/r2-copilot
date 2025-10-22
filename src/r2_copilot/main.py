@@ -3,16 +3,6 @@ from r2_copilot.server.instance import mcp
 
 # 各ツールモジュールをインポートすることで、デコレータが実行され、
 # ツールがmcpインスタンスに自動的に登録されます。
-from r2_copilot.tools import session_tools
-from r2_copilot.tools import analysis
-from r2_copilot.tools import binary_info
-from r2_copilot.tools import disassembly
-from r2_copilot.tools import navigation
-from r2_copilot.tools import search
-from r2_copilot.tools import write
-from r2_copilot.tools import debugger
-from r2_copilot.tools import flags
-from r2_copilot.tools import config
 
 # execute_commandツールを直接登録
 from r2_copilot.utils.r2_manager import r2_manager

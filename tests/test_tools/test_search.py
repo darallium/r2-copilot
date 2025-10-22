@@ -35,7 +35,10 @@ class TestSearchTools:
     async def test_search_bytes_with_range(self, test_session):
         """Test searching within address range."""
         results = await SearchTools.search_bytes(
-            pattern="90", from_addr=0x400000, to_addr=0x401000, session_id="test_session"  # NOP
+            pattern="90",
+            from_addr=0x400000,
+            to_addr=0x401000,
+            session_id="test_session",  # NOP
         )
 
         assert isinstance(results, list)
@@ -117,7 +120,8 @@ class TestSearchTools:
     async def test_search_pattern_with_wildcards(self, test_session):
         """Test searching with pattern containing wildcards."""
         results = await SearchTools.search_pattern(
-            pattern="7f45??46", session_id="test_session"  # ELF with wildcard
+            pattern="7f45??46",
+            session_id="test_session",  # ELF with wildcard
         )
 
         assert isinstance(results, list)

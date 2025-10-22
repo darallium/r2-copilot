@@ -239,7 +239,9 @@ class AnalysisTools:
 
     @staticmethod
     async def analyze_opcodes(
-        count: int = 1, address: Optional[Address] = None, session_id: Optional[str] = None
+        count: int = 1,
+        address: Optional[Address] = None,
+        session_id: Optional[str] = None,
     ) -> List[Dict[str, Any]]:
         """
         Analyze N opcodes from current or specified offset.
@@ -265,7 +267,10 @@ class AnalysisTools:
 
     @staticmethod
     async def define_function(
-        address: Address, size: int, name: Optional[str] = None, session_id: Optional[str] = None
+        address: Address,
+        size: int,
+        name: Optional[str] = None,
+        session_id: Optional[str] = None,
     ) -> bool:
         """
         Define a function manually.

@@ -20,7 +20,9 @@ class DisassemblyTools:
 
     @staticmethod
     async def disassemble(
-        count: int = 10, address: Optional[Address] = None, session_id: Optional[str] = None
+        count: int = 10,
+        address: Optional[Address] = None,
+        session_id: Optional[str] = None,
     ) -> List[DisassemblyLine]:
         """
         Disassemble N instructions.
@@ -101,7 +103,9 @@ class DisassemblyTools:
 
     @staticmethod
     async def print_hex(
-        size: int = 64, address: Optional[Address] = None, session_id: Optional[str] = None
+        size: int = 64,
+        address: Optional[Address] = None,
+        session_id: Optional[str] = None,
     ) -> str:
         """
         Print hexdump.
@@ -144,7 +148,9 @@ class DisassemblyTools:
 
     @staticmethod
     async def print_instructions(
-        count: int = 10, address: Optional[Address] = None, session_id: Optional[str] = None
+        count: int = 10,
+        address: Optional[Address] = None,
+        session_id: Optional[str] = None,
     ) -> List[str]:
         """
         Print instructions only (no addresses, xrefs).
@@ -202,7 +208,9 @@ class DisassemblyTools:
 
     @staticmethod
     async def print_words(
-        count: int = 8, address: Optional[Address] = None, session_id: Optional[str] = None
+        count: int = 8,
+        address: Optional[Address] = None,
+        session_id: Optional[str] = None,
     ) -> str:
         """
         Print hexdump of N words.
@@ -223,7 +231,9 @@ class DisassemblyTools:
 
     @staticmethod
     async def print_disassembled_bytes(
-        size: int = 32, address: Optional[Address] = None, session_id: Optional[str] = None
+        size: int = 32,
+        address: Optional[Address] = None,
+        session_id: Optional[str] = None,
     ) -> str:
         """
         Print N bytes disassembled.

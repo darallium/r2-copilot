@@ -63,7 +63,10 @@ class TestWriteTools:
     async def test_write_string(self, write_session):
         """Test writing string."""
         result = await WriteTools.write_string(
-            text="Hello", address=Address(value=0x40), null_terminated=True, session_id="write_test"
+            text="Hello",
+            address=Address(value=0x40),
+            null_terminated=True,
+            session_id="write_test",
         )
 
         assert result is True
@@ -71,7 +74,10 @@ class TestWriteTools:
     async def test_write_string_no_null(self, write_session):
         """Test writing string without null terminator."""
         result = await WriteTools.write_string(
-            text="Test", address=Address(value=0x50), null_terminated=False, session_id="write_test"
+            text="Test",
+            address=Address(value=0x50),
+            null_terminated=False,
+            session_id="write_test",
         )
 
         assert result is True
@@ -79,7 +85,10 @@ class TestWriteTools:
     async def test_write_value(self, write_session):
         """Test writing integer value."""
         result = await WriteTools.write_value(
-            value=0x12345678, size=4, address=Address(value=0x60), session_id="write_test"
+            value=0x12345678,
+            size=4,
+            address=Address(value=0x60),
+            session_id="write_test",
         )
 
         assert result is True
@@ -100,7 +109,10 @@ class TestWriteTools:
 
         # 8 bytes
         result8 = await WriteTools.write_value(
-            value=0xFFFFFFFFFFFFFFFF, size=8, address=Address(value=0x78), session_id="write_test"
+            value=0xFFFFFFFFFFFFFFFF,
+            size=8,
+            address=Address(value=0x78),
+            session_id="write_test",
         )
         assert result8 is True
 
@@ -119,7 +131,10 @@ class TestWriteTools:
     async def test_write_operation_add(self, write_session):
         """Test ADD write operation."""
         result = await WriteTools.write_operation(
-            operation="add", value=1, address=Address(value=0x90), session_id="write_test"
+            operation="add",
+            value=1,
+            address=Address(value=0x90),
+            session_id="write_test",
         )
 
         assert result is True
@@ -165,7 +180,10 @@ class TestWriteTools:
 
         try:
             result = await WriteTools.write_to_file(
-                file_path=output_file, size=100, address=Address(value=0x0), session_id="write_test"
+                file_path=output_file,
+                size=100,
+                address=Address(value=0x0),
+                session_id="write_test",
             )
 
             assert result is True

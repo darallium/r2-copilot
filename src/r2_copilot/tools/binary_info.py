@@ -64,7 +64,9 @@ class BinaryInfoTools:
 
     @staticmethod
     async def get_symbols(
-        imports_only: bool = False, exports_only: bool = False, session_id: Optional[str] = None
+        imports_only: bool = False,
+        exports_only: bool = False,
+        session_id: Optional[str] = None,
     ) -> List[SymbolInfo]:
         """
         Get binary symbols.
@@ -276,7 +278,9 @@ async def get_sections(session_id: Optional[str] = None) -> List[Dict[str, Any]]
 
 @mcp.tool()
 async def get_symbols(
-    imports_only: bool = False, exports_only: bool = False, session_id: Optional[str] = None
+    imports_only: bool = False,
+    exports_only: bool = False,
+    session_id: Optional[str] = None,
 ) -> List[Dict[str, Any]]:
     """Get binary symbols (is)."""
     symbols = await BinaryInfoTools.get_symbols(imports_only, exports_only, session_id)

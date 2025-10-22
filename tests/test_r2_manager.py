@@ -1,11 +1,8 @@
 """Tests for R2Manager."""
 
-from pathlib import Path
-
 import pytest
 
 from radare2_mcp.models.schemas import Architecture, R2Session
-from radare2_mcp.utils.r2_manager import R2Manager
 
 
 class TestR2Manager:

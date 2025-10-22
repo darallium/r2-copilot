@@ -16,7 +16,9 @@ class WriteTools:
 
     @staticmethod
     async def write_hex(
-        data: Union[str, bytes], address: Optional[Address] = None, session_id: Optional[str] = None
+        data: Union[str, bytes],
+        address: Optional[Address] = None,
+        session_id: Optional[str] = None,
     ) -> bool:
         """
         Write hex values at current or specified offset.
@@ -43,7 +45,9 @@ class WriteTools:
 
     @staticmethod
     async def write_assembly(
-        assembly: str, address: Optional[Address] = None, session_id: Optional[str] = None
+        assembly: str,
+        address: Optional[Address] = None,
+        session_id: Optional[str] = None,
     ) -> bool:
         """
         Write assembly instruction.
@@ -244,7 +248,9 @@ class WriteTools:
 
     @staticmethod
     async def write_nop(
-        count: int = 1, address: Optional[Address] = None, session_id: Optional[str] = None
+        count: int = 1,
+        address: Optional[Address] = None,
+        session_id: Optional[str] = None,
     ) -> bool:
         """
         Write NOP instructions.
@@ -260,7 +266,12 @@ class WriteTools:
             arch = info.get("bin", {}).get("arch", "x86")
 
             # Determine NOP opcode based on architecture
-            nop_opcodes = {"x86": "90", "arm": "00f020e3", "mips": "00000000", "ppc": "60000000"}
+            nop_opcodes = {
+                "x86": "90",
+                "arm": "00f020e3",
+                "mips": "00000000",
+                "ppc": "60000000",
+            }
 
             nop = nop_opcodes.get(arch, "90")
             hex_data = nop * count

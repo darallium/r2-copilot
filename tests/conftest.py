@@ -123,7 +123,14 @@ def compiled_test_binary(test_c_source):
     try:
         # Try to compile with gcc
         result = subprocess.run(
-            ["gcc", "-o", output_file, "-fno-stack-protector", "-no-pie", test_c_source],
+            [
+                "gcc",
+                "-o",
+                output_file,
+                "-fno-stack-protector",
+                "-no-pie",
+                test_c_source,
+            ],
             capture_output=True,
         )
 
