@@ -9,6 +9,9 @@
 * **r2ai** - the [official r2ai](https://github.com/radareorg/r2ai)
 
 ## インストール
+※ r2pmに追加してもらえました！`r2pm -Uci r2-copilot`でインストール可能です。
+
+## セルフビルドする場合
 
 1.  リポジトリのクローン
 ```bash
@@ -23,7 +26,7 @@ cd r2-copilot
 uv sync
 ```
 
-3.  radare2のインストール
+##  radare2のインストール
 `r2pipe` が正しく動作するためには、`radare2` がシステムにインストールされている必要があります。
 
 ```bash
