@@ -4,12 +4,13 @@ import json
 import logging
 from typing import Any, Dict, List, Optional
 
-from radare2_mcp.models.schemas import (
+from r2_copilot.models.schemas import (
     SectionInfo,
     StringInfo,
     SymbolInfo,
 )
-from radare2_mcp.utils.r2_manager import r2_manager
+from r2_copilot.server.instance import mcp
+from r2_copilot.utils.r2_manager import r2_manager
 
 logger = logging.getLogger(__name__)
 
@@ -255,3 +256,55 @@ class BinaryInfoTools:
         except Exception as e:
             logger.error(f"Failed to check security: {e}")
             return {}
+
+
+# MCP Tool Wrappers
+
+
+@mcp.tool()
+async def get_binary_info(session_id: Optional[str] = None) -> Dict[str, Any]:
+    """Get comprehensive binary information (iI)."""
+    return await BinaryInfoTools.get_binary_info(session_id)
+
+
+@mcp.tool()
+async def get_sections(session_id: Optional[str] = None) -> List[Dict[str, Any]]:
+    """Get binary sections (iS)."""
+    sections = await BinaryInfoTools.get_sections(session_id)
+    return [s.dict() for s in sections]
+
+
+@mcp.tool()
+async def get_symbols(
+    imports_only: bool = False, exports_only: bool = False, session_id: Optional[str] = None
+) -> List[Dict[str, Any]]:
+    """Get binary symbols (is)."""
+    symbols = await BinaryInfoTools.get_symbols(imports_only, exports_only, session_id)
+    return [s.dict() for s in symbols]
+
+
+@mcp.tool()
+async def get_strings(
+    data_section_only: bool = True, session_id: Optional[str] = None
+) -> List[Dict[str, Any]]:
+    """Get strings from binary (iz/izz)."""
+    strings = await BinaryInfoTools.get_strings(data_section_only, session_id)
+    return [s.dict() for s in strings]
+
+
+@mcp.tool()
+async def get_imports(session_id: Optional[str] = None) -> List[Dict[str, Any]]:
+    """Get imported functions (ii)."""
+    return await BinaryInfoTools.get_imports(session_id)
+
+
+@mcp.tool()
+async def get_entrypoint(session_id: Optional[str] = None) -> Optional[int]:
+    """Get binary entrypoint (ie)."""
+    return await BinaryInfoTools.get_entrypoint(session_id)
+
+
+@mcp.tool()
+async def check_security(session_id: Optional[str] = None) -> Dict[str, bool]:
+    """Check binary security features (NX, PIE, Canary, etc.)."""
+    return await BinaryInfoTools.check_security(session_id)

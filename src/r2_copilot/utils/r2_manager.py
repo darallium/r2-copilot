@@ -7,7 +7,7 @@ from typing import Any, Dict, List, Optional
 
 import r2pipe
 
-from radare2_mcp.models.schemas import Architecture, R2Session
+from r2_copilot.models.schemas import Architecture, R2Session
 
 logger = logging.getLogger(__name__)
 

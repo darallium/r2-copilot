@@ -1,15 +1,15 @@
 [English](README.en.md)
 
-# radare2-mcp-server
+# r2-copilot
 
-`radare2-mcp-server` は、強力なリバースエンジニアリングフレームワークである [radare2](https://github.com/radare/radare2) のための Multi-Agent Collaboration Protocol (MCP) サーバーです。
+`r2-copilot` は、強力なリバースエンジニアリングフレームワークである [radare2](https://github.com/radare/radare2) のための Multi-Agent Collaboration Protocol (MCP) サーバーです。
 
 ## インストール
 
 1.  リポジトリのクローン
 ```bash
-git clone https://github.com/your-repo/radare2-mcp-server.git
-cd radare2-mcp-server
+git clone https://github.com/your-repo/r2-copilot.git
+cd r2-copilot
 ```
 
 2.  依存関係のインストール
@@ -28,6 +28,8 @@ cd ~/.local/src/
 git clone https://github.com/radareorg/radare2 --depth 1
 radare2/sys/install.sh
 ```
+
+windowsの場合、ビルド済みバイナリをダウンロードしてきてPATHを通す方が早いです。
 
 see. https://github.com/radareorg/radare2
 
@@ -53,9 +55,17 @@ gemini-cliで利用するには、 `~/.gemini/settings.json` を以下の通り�
     /*
         ...
     */
-    "radare2-mcp": {
-      "command": "/path/to/radare2-mcp-server/start.sh"
-    }
+    "r2-copilot": {
+      "command": "/path/to/r2-copilot/start.sh"
+      /* uvを使ってる場合はこっちの方がパフォーマンス出ると思います  
+      "command": "uv",
+      "args": [
+        "run",
+        "--directory",
+        "/path/to/r2-copilot",
+        "r2copilot"
+      ]
+      */
   }
 }
 ```

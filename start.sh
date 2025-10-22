@@ -8,7 +8,7 @@ if [ ! -f "$PYTHON_EXEC" ]; then
   exit 1
 fi
 
-"$PYTHON_EXEC" -m radare2_mcp.server "$@"
+"$PYTHON_EXEC" -m r2_copilot.main "$@"
 
 # alternative using uv (Unicorn Virtualenv)
-# uv run --directory "$SCRIPT_DIR" -- python -m radare2_mcp.server "$@"
+# uv run --directory "$SCRIPT_DIR" -- python -m radare2_mcp.main "$@"

@@ -1,15 +1,15 @@
 [日本語](README.md)
 
-# radare2-mcp-server
+# r2-copilot
 
-`radare2-mcp-server` is a Multi-Agent Collaboration Protocol (MCP) server for the powerful reverse engineering framework, [radare2](https://github.com/radare/radare2).
+`r2-copilot` is a Multi-Agent Collaboration Protocol (MCP) server for the powerful reverse engineering framework, [radare2](https://github.com/radare/radare2).
 
 ## Installation
 
 1.  Clone the repository
 ```bash
-git clone https://github.com/your-repo/radare2-mcp-server.git
-cd radare2-mcp-server
+git clone https://github.com/your-repo/r2-copilot.git
+cd r2-copilot
 ```
 
 2.  Install dependencies
@@ -53,8 +53,17 @@ To use with gemini-cli, add the following to your `~/.gemini/settings.json`:
     /*
         ...
     */
-    "radare2-mcp": {
-      "command": "/path/to/radare2-mcp-server/start.sh"
+    "r2-copilot": {
+      "command": "/path/to/r2-copilot/start.sh"
+      /* if you use uv:  
+      "command": "uv",
+      "args": [
+        "run",
+        "--directory",
+        "/path/to/r2-copilot",
+        "r2copilot"
+      ]
+      */
     }
   }
 }

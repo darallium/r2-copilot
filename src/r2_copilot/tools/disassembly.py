@@ -2,14 +2,15 @@
 
 import json
 import logging
-from typing import List, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
-from radare2_mcp.models.schemas import (
+from r2_copilot.models.schemas import (
     Address,
     DisassemblyLine,
     OutputFormat,
 )
-from radare2_mcp.utils.r2_manager import r2_manager
+from r2_copilot.server.instance import mcp
+from r2_copilot.utils.r2_manager import r2_manager
 
 logger = logging.getLogger(__name__)
 
@@ -261,3 +262,51 @@ class DisassemblyTools:
         except Exception as e:
             logger.error(f"Failed to print entropy: {e}")
             return ""
+
+
+# MCP Tool Wrappers
+
+
+@mcp.tool()
+async def disassemble(
+    count: int = 10, address: Optional[str] = None, session_id: Optional[str] = None
+) -> List[Dict[str, Any]]:
+    """
+    Disassemble N instructions (pd).
+
+    Args:
+        count: Number of instructions to disassemble
+        address: Starting address or symbol
+        session_id: Session to use
+    """
+    addr = Address(value=address) if address else None
+    lines = await DisassemblyTools.disassemble(count, addr, session_id)
+    return [line.dict() for line in lines]
+
+
+@mcp.tool()
+async def disassemble_function(
+    address: Optional[str] = None, session_id: Optional[str] = None
+) -> List[Dict[str, Any]]:
+    """Disassemble entire function (pdf)."""
+    addr = Address(value=address) if address else None
+    lines = await DisassemblyTools.disassemble_function(addr, session_id)
+    return [line.dict() for line in lines]
+
+
+@mcp.tool()
+async def print_hex(
+    size: int = 64, address: Optional[str] = None, session_id: Optional[str] = None
+) -> str:
+    """Print hexdump (px)."""
+    addr = Address(value=address) if address else None
+    return await DisassemblyTools.print_hex(size, addr, session_id)
+
+
+@mcp.tool()
+async def print_string(
+    address: str, length: Optional[int] = None, session_id: Optional[str] = None
+) -> str:
+    """Print string at address (psz)."""
+    addr = Address(value=address)
+    return await DisassemblyTools.print_string(addr, length, session_id)

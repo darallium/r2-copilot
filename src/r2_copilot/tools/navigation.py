@@ -3,8 +3,9 @@
 import logging
 from typing import List, Optional
 
-from radare2_mcp.models.schemas import Address
-from radare2_mcp.utils.r2_manager import r2_manager
+from r2_copilot.models.schemas import Address
+from r2_copilot.server.instance import mcp
+from r2_copilot.utils.r2_manager import r2_manager
 
 logger = logging.getLogger(__name__)
 
@@ -184,3 +185,34 @@ class NavigationTools:
         except Exception as e:
             logger.error(f"Failed to seek to register: {e}")
             return 0
+
+
+# MCP Tool Wrappers
+
+
+@mcp.tool()
+async def seek(address: str, session_id: Optional[str] = None) -> int:
+    """
+    Seek to address or symbol (s).
+    Returns new position.
+    """
+    addr = Address(value=address)
+    return await NavigationTools.seek(addr, session_id)
+
+
+@mcp.tool()
+async def seek_relative(offset: int, session_id: Optional[str] = None) -> int:
+    """Seek relative to current position."""
+    return await NavigationTools.seek_relative(offset, session_id)
+
+
+@mcp.tool()
+async def get_current_address(session_id: Optional[str] = None) -> int:
+    """Get current address."""
+    return await NavigationTools.get_current_address(session_id)
+
+
+@mcp.tool()
+async def set_block_size(size: int, session_id: Optional[str] = None) -> bool:
+    """Set block size (b)."""
+    return await NavigationTools.set_block_size(size, session_id)

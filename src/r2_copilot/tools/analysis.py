@@ -4,12 +4,13 @@ import json
 import logging
 from typing import Any, Dict, List, Optional
 
-from radare2_mcp.models.schemas import (
+from r2_copilot.models.schemas import (
     Address,
     AnalysisResult,
     FunctionInfo,
 )
-from radare2_mcp.utils.r2_manager import r2_manager
+from r2_copilot.server.instance import mcp
+from r2_copilot.utils.r2_manager import r2_manager
 
 logger = logging.getLogger(__name__)
 
@@ -304,3 +305,63 @@ class AnalysisTools:
         except Exception as e:
             logger.error(f"Failed to undefine function: {e}")
             return False
+
+
+# MCP Tool Wrappers
+
+
+@mcp.tool()
+async def analyze_all(session_id: Optional[str] = None) -> Dict[str, Any]:
+    """
+    Perform complete analysis of the binary (aa).
+    Analyzes functions, basic blocks, and cross-references.
+    """
+    result = await AnalysisTools.analyze_all(session_id)
+    return result.dict()
+
+
+@mcp.tool()
+async def analyze_function(
+    address: Optional[str] = None, session_id: Optional[str] = None
+) -> Dict[str, Any]:
+    """
+    Analyze function at current or specified address (af).
+
+    Args:
+        address: Address or symbol (e.g., "0x401000", "sym.main")
+        session_id: Session to use
+    """
+    addr = Address(value=address) if address else None
+    result = await AnalysisTools.analyze_function(addr, session_id)
+    return result.dict()
+
+
+@mcp.tool()
+async def list_functions(session_id: Optional[str] = None) -> List[Dict[str, Any]]:
+    """List all analyzed functions (afl)."""
+    functions = await AnalysisTools.list_functions(session_id)
+    return [f.dict() for f in functions]
+
+
+@mcp.tool()
+async def get_function_info(
+    address: Optional[str] = None, session_id: Optional[str] = None
+) -> Optional[Dict[str, Any]]:
+    """Get detailed information about a function (afi)."""
+    addr = Address(value=address) if address else None
+    info = await AnalysisTools.get_function_info(addr, session_id)
+    return info.dict() if info else None
+
+
+@mcp.tool()
+async def get_xrefs_to(address: str, session_id: Optional[str] = None) -> List[Dict[str, Any]]:
+    """Get cross references to an address (axt)."""
+    addr = Address(value=address)
+    return await AnalysisTools.get_xrefs_to(addr, session_id)
+
+
+@mcp.tool()
+async def get_xrefs_from(address: str, session_id: Optional[str] = None) -> List[Dict[str, Any]]:
+    """Get cross references from an address (axf)."""
+    addr = Address(value=address)
+    return await AnalysisTools.get_xrefs_from(addr, session_id)

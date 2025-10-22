@@ -4,13 +4,14 @@ import json
 import logging
 from typing import Any, Dict, List, Optional
 
-from radare2_mcp.models.schemas import (
+from r2_copilot.models.schemas import (
     Address,
     Breakpoint,
     MemoryMap,
     RegisterState,
 )
-from radare2_mcp.utils.r2_manager import r2_manager
+from r2_copilot.server.instance import mcp
+from r2_copilot.utils.r2_manager import r2_manager
 
 logger = logging.getLogger(__name__)
 
@@ -313,3 +314,51 @@ class DebuggerTools:
         except Exception as e:
             logger.error(f"Failed to restart debug: {e}")
             return False
+
+
+# MCP Tool Wrappers
+
+
+@mcp.tool()
+async def continue_execution(session_id: Optional[str] = None) -> bool:
+    """Continue program execution (dc)."""
+    return await DebuggerTools.continue_execution(session_id)
+
+
+@mcp.tool()
+async def step_into(session_id: Optional[str] = None) -> bool:
+    """Step into (single step) (ds)."""
+    return await DebuggerTools.step_into(session_id)
+
+
+@mcp.tool()
+async def step_over(session_id: Optional[str] = None) -> bool:
+    """Step over (dso)."""
+    return await DebuggerTools.step_over(session_id)
+
+
+@mcp.tool()
+async def set_breakpoint(address: str, session_id: Optional[str] = None) -> bool:
+    """Set breakpoint (db)."""
+    addr = Address(value=address)
+    return await DebuggerTools.set_breakpoint(addr, session_id=session_id)
+
+
+@mcp.tool()
+async def list_breakpoints(session_id: Optional[str] = None) -> List[Dict[str, Any]]:
+    """List all breakpoints."""
+    bps = await DebuggerTools.list_breakpoints(session_id)
+    return [bp.dict() for bp in bps]
+
+
+@mcp.tool()
+async def get_registers(session_id: Optional[str] = None) -> List[Dict[str, Any]]:
+    """Get register values (dr)."""
+    regs = await DebuggerTools.get_registers(session_id)
+    return [r.dict() for r in regs]
+
+
+@mcp.tool()
+async def set_register(register: str, value: int, session_id: Optional[str] = None) -> bool:
+    """Set register value (dr reg=value)."""
+    return await DebuggerTools.set_register(register, value, session_id)
