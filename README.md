@@ -4,6 +4,10 @@
 
 `r2-copilot` は、強力なリバースエンジニアリングフレームワークである [radare2](https://github.com/radare/radare2) のための Multi-Agent Collaboration Protocol (MCP) サーバーです。
 
+このリポジトリはサードパーティーツールになります。オフィシャルのmcpツールは以下になります。
+* **r2mcp** - the [official radare2 mcp](https://github.com/radareorg/radare2-mcp)
+* **r2ai** - the [official r2ai](https://github.com/radareorg/r2ai)
+
 ## インストール
 
 1.  リポジトリのクローン
