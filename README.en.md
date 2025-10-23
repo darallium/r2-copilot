@@ -9,7 +9,9 @@ If you are looking to use radare2 llm tools:
 * **r2ai** - the [official r2ai](https://github.com/radareorg/r2ai)
 
 ## Installation
+🥳 r2-copilot has been added to r2pm! You can install with `r2pm -Uci r2-copilot` 
 
+### self build
 1.  Clone the repository
 ```bash
 git clone https://github.com/your-repo/r2-copilot.git
@@ -23,7 +25,7 @@ The project uses `uv` to manage dependencies.
 uv sync
 ```
 
-3.  Install radare2
+###  Install radare2
 `r2pipe` requires `radare2` to be installed on your system for it to work correctly.
 
 ```bash
