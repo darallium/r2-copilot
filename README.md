@@ -63,7 +63,11 @@ gemini-cliで利用するには、 `~/.gemini/settings.json` を以下の通り�
         ...
     */
     "r2-copilot": {
+      "command": "r2pm",
+      "args": ["-r", "r2mcp"]
+      /* セルフビルドの場合で、uv使ってない人はこれ
       "command": "/path/to/r2-copilot/start.sh"
+      /* 
       /* uvを使ってる場合はこっちの方がパフォーマンス出ると思います  
       "command": "uv",
       "args": [
