@@ -231,3 +231,39 @@ class ConfigProperty(BaseModel):
     type: str
     description: Optional[str] = None
     options: Optional[List[Any]] = None
+
+
+class CryptoDetection(BaseModel):
+    """Cryptographic algorithm detection result."""
+
+    algorithm: str
+    confidence: float  # 0.0 to 1.0
+    offset: int
+    size: int
+    data: bytes
+    matches: List[str]
+    additional_info: Optional[Dict[str, Any]] = None
+
+    @property
+    def hex_data(self) -> str:
+        return self.data.hex()
+
+
+class CryptoConstant(BaseModel):
+    """Cryptographic constant information."""
+
+    name: str
+    value: Union[bytes, List[int], int]
+    size: int
+    algorithm: str
+    description: Optional[str] = None
+
+    @property
+    def hex_value(self) -> str:
+        if isinstance(self.value, bytes):
+            return self.value.hex()
+        elif isinstance(self.value, list):
+            return "".join(f"{x:02x}" for x in self.value)
+        elif isinstance(self.value, int):
+            return f"{self.value:x}"
+        return str(self.value)
