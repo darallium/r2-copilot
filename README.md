@@ -1,7 +1,7 @@
 # [English is here](README.en.md)
 
 # r2-copilot
-
+[![asciicast](https://asciinema.org/a/OHQJfZojv4oBf1sAmWeImOMJ7.svg)](https://asciinema.org/a/OHQJfZojv4oBf1sAmWeImOMJ7)
 `r2-copilot` は、強力なリバースエンジニアリングフレームワークである [radare2](https://github.com/radare/radare2) のための Multi-Agent Collaboration Protocol (MCP) サーバーです。
 
 このリポジトリはサードパーティーツールになります。オフィシャルのmcpツールは以下になります。
