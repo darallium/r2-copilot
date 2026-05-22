@@ -1,4 +1,4 @@
-# [English is here](README.en.md)
+# [English is Same](README.en.md)
 
 # r2-copilot
 [![asciicast](https://asciinema.org/a/OHQJfZojv4oBf1sAmWeImOMJ7.svg)](https://asciinema.org/a/OHQJfZojv4oBf1sAmWeImOMJ7)
@@ -15,7 +15,7 @@
 
 1.  リポジトリのクローン
 ```bash
-git clone https://github.com/your-repo/r2-copilot.git
+
 cd r2-copilot
 ```
 
