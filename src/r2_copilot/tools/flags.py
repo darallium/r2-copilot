@@ -2,10 +2,11 @@
 
 import json
 import logging
-from typing import List, Optional
+from typing import Any, Dict, List, Optional
 
-from radare2_mcp.models.schemas import Address, Flag
-from radare2_mcp.utils.r2_manager import r2_manager
+from r2_copilot.models.schemas import Address, Flag
+from r2_copilot.server.instance import mcp
+from r2_copilot.utils.r2_manager import r2_manager
 
 logger = logging.getLogger(__name__)
 
@@ -146,3 +147,24 @@ class FlagTools:
         except Exception as e:
             logger.error(f"Failed to change flag space: {e}")
             return False
+
+
+# MCP Tool Wrappers
+
+
+@mcp.tool()
+async def list_flags(
+    space: Optional[str] = None, session_id: Optional[str] = None
+) -> List[Dict[str, Any]]:
+    """List flags/labels (f)."""
+    flags = await FlagTools.list_flags(space, session_id)
+    return [f.dict() for f in flags]
+
+
+@mcp.tool()
+async def create_flag(
+    name: str, address: str, size: int = 1, session_id: Optional[str] = None
+) -> bool:
+    """Create a flag/label at address (f name @ addr)."""
+    addr = Address(value=address)
+    return await FlagTools.create_flag(name, addr, size, session_id)

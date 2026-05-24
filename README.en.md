@@ -1,15 +1,21 @@
 [日本語](README.md)
 
-# radare2-mcp-server
+# r2-copilot
 
-`radare2-mcp-server` is a Multi-Agent Collaboration Protocol (MCP) server for the powerful reverse engineering framework, [radare2](https://github.com/radare/radare2).
+`r2-copilot` is a Multi-Agent Collaboration Protocol (MCP) server for the powerful reverse engineering framework, [radare2](https://github.com/radare/radare2).
+
+If you are looking to use radare2 llm tools:
+* **r2mcp** - the [official radare2 mcp](https://github.com/radareorg/radare2-mcp)
+* **r2ai** - the [official r2ai](https://github.com/radareorg/r2ai)
 
 ## Installation
+🥳 r2-copilot has been added to r2pm! You can install with `r2pm -Uci r2-copilot` 
 
+### self build
 1.  Clone the repository
 ```bash
-git clone https://github.com/your-repo/radare2-mcp-server.git
-cd radare2-mcp-server
+git clone https://github.com/your-repo/r2-copilot.git
+cd r2-copilot
 ```
 
 2.  Install dependencies
@@ -19,7 +25,7 @@ The project uses `uv` to manage dependencies.
 uv sync
 ```
 
-3.  Install radare2
+###  Install radare2
 `r2pipe` requires `radare2` to be installed on your system for it to work correctly.
 
 ```bash
@@ -53,8 +59,17 @@ To use with gemini-cli, add the following to your `~/.gemini/settings.json`:
     /*
         ...
     */
-    "radare2-mcp": {
-      "command": "/path/to/radare2-mcp-server/start.sh"
+    "r2-copilot": {
+      "command": "/path/to/r2-copilot/start.sh"
+      /* if you use uv:  
+      "command": "uv",
+      "args": [
+        "run",
+        "--directory",
+        "/path/to/r2-copilot",
+        "r2copilot"
+      ]
+      */
     }
   }
 }

@@ -138,7 +138,15 @@ class TestBinaryInfoTools:
 
         assert isinstance(security, dict)
         # Check for security feature flags
-        expected_features = ["nx", "pic", "canary", "crypto", "stripped", "static", "relocs"]
+        expected_features = [
+            "nx",
+            "pic",
+            "canary",
+            "crypto",
+            "stripped",
+            "static",
+            "relocs",
+        ]
         for feature in expected_features:
             assert feature in security
             assert isinstance(security[feature], bool)

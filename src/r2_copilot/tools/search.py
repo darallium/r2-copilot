@@ -4,12 +4,13 @@ import json
 import logging
 from typing import Any, Dict, List, Optional
 
-from radare2_mcp.models.schemas import (
+from r2_copilot.models.schemas import (
     Address,
     ROPGadget,
     SearchResult,
 )
-from radare2_mcp.utils.r2_manager import r2_manager
+from r2_copilot.server.instance import mcp
+from r2_copilot.utils.r2_manager import r2_manager
 
 logger = logging.getLogger(__name__)
 
@@ -314,3 +315,46 @@ class SearchTools:
         except Exception as e:
             logger.error(f"Failed to configure search: {e}")
             return False
+
+
+# MCP Tool Wrappers
+
+
+@mcp.tool()
+async def search_bytes(
+    pattern: str,
+    from_addr: Optional[int] = None,
+    to_addr: Optional[int] = None,
+    session_id: Optional[str] = None,
+) -> List[Dict[str, Any]]:
+    """
+    Search for byte pattern (/x).
+    Pattern should be hex string like "909090" or "\\x90\\x90"
+    """
+    results = await SearchTools.search_bytes(pattern, from_addr, to_addr, session_id)
+    return [r.dict() for r in results]
+
+
+@mcp.tool()
+async def search_string(
+    text: str,
+    case_sensitive: bool = True,
+    from_addr: Optional[int] = None,
+    to_addr: Optional[int] = None,
+    session_id: Optional[str] = None,
+) -> List[Dict[str, Any]]:
+    """Search for string (/)."""
+    results = await SearchTools.search_string(text, case_sensitive, from_addr, to_addr, session_id)
+    return [r.dict() for r in results]
+
+
+@mcp.tool()
+async def search_rop_gadgets(
+    instructions: List[str], max_length: int = 5, session_id: Optional[str] = None
+) -> List[Dict[str, Any]]:
+    """
+    Search for ROP gadgets (/R).
+    Example: ["pop eax", "ret"]
+    """
+    gadgets = await SearchTools.search_rop_gadgets(instructions, max_length, session_id)
+    return [g.dict() for g in gadgets]

@@ -10,7 +10,6 @@ import pytest
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
 from radare2_mcp import server
-from radare2_mcp.utils.r2_manager import r2_manager
 
 
 @pytest.mark.asyncio
@@ -106,7 +105,9 @@ class TestIntegration:
         # Flag interesting gadgets
         for i, gadget in enumerate(gadgets[:5]):  # First 5 gadgets
             await server.create_flag(
-                name=f"gadget_{i}", address=f"0x{gadget['offset']:x}", session_id="rop_test"
+                name=f"gadget_{i}",
+                address=f"0x{gadget['offset']:x}",
+                session_id="rop_test",
             )
 
         # Cleanup

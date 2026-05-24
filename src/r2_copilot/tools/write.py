@@ -4,8 +4,9 @@ import logging
 from pathlib import Path
 from typing import Optional, Union
 
-from radare2_mcp.models.schemas import Address
-from radare2_mcp.utils.r2_manager import r2_manager
+from r2_copilot.models.schemas import Address
+from r2_copilot.server.instance import mcp
+from r2_copilot.utils.r2_manager import r2_manager
 
 logger = logging.getLogger(__name__)
 
@@ -15,7 +16,9 @@ class WriteTools:
 
     @staticmethod
     async def write_hex(
-        data: Union[str, bytes], address: Optional[Address] = None, session_id: Optional[str] = None
+        data: Union[str, bytes],
+        address: Optional[Address] = None,
+        session_id: Optional[str] = None,
     ) -> bool:
         """
         Write hex values at current or specified offset.
@@ -42,7 +45,9 @@ class WriteTools:
 
     @staticmethod
     async def write_assembly(
-        assembly: str, address: Optional[Address] = None, session_id: Optional[str] = None
+        assembly: str,
+        address: Optional[Address] = None,
+        session_id: Optional[str] = None,
     ) -> bool:
         """
         Write assembly instruction.
@@ -243,7 +248,9 @@ class WriteTools:
 
     @staticmethod
     async def write_nop(
-        count: int = 1, address: Optional[Address] = None, session_id: Optional[str] = None
+        count: int = 1,
+        address: Optional[Address] = None,
+        session_id: Optional[str] = None,
     ) -> bool:
         """
         Write NOP instructions.
@@ -259,7 +266,12 @@ class WriteTools:
             arch = info.get("bin", {}).get("arch", "x86")
 
             # Determine NOP opcode based on architecture
-            nop_opcodes = {"x86": "90", "arm": "00f020e3", "mips": "00000000", "ppc": "60000000"}
+            nop_opcodes = {
+                "x86": "90",
+                "arm": "00f020e3",
+                "mips": "00000000",
+                "ppc": "60000000",
+            }
 
             nop = nop_opcodes.get(arch, "90")
             hex_data = nop * count
@@ -268,3 +280,39 @@ class WriteTools:
         except Exception as e:
             logger.error(f"Failed to write NOP: {e}")
             return False
+
+
+# MCP Tool Wrappers
+
+
+@mcp.tool()
+async def write_hex(
+    data: str, address: Optional[str] = None, session_id: Optional[str] = None
+) -> bool:
+    """
+    Write hex values (wx).
+    Data should be hex string like "909090"
+    """
+    addr = Address(value=address) if address else None
+    return await WriteTools.write_hex(data, addr, session_id)
+
+
+@mcp.tool()
+async def write_assembly(
+    assembly: str, address: Optional[str] = None, session_id: Optional[str] = None
+) -> bool:
+    """
+    Write assembly instruction (wa).
+    Example: "jmp 0x401000"
+    """
+    addr = Address(value=address) if address else None
+    return await WriteTools.write_assembly(assembly, addr, session_id)
+
+
+@mcp.tool()
+async def write_nop(
+    count: int = 1, address: Optional[str] = None, session_id: Optional[str] = None
+) -> bool:
+    """Write NOP instructions."""
+    addr = Address(value=address) if address else None
+    return await WriteTools.write_nop(count, addr, session_id)

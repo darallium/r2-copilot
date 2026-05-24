@@ -3,7 +3,8 @@
 import logging
 from typing import Any, List, Optional
 
-from radare2_mcp.utils.r2_manager import r2_manager
+from r2_copilot.server.instance import mcp
+from r2_copilot.utils.r2_manager import r2_manager
 
 logger = logging.getLogger(__name__)
 
@@ -169,3 +170,18 @@ class ConfigTools:
         except Exception as e:
             logger.error(f"Failed to reset config: {e}")
             return False
+
+
+# MCP Tool Wrappers
+
+
+@mcp.tool()
+async def get_config(key: Optional[str] = None, session_id: Optional[str] = None) -> Any:
+    """Get configuration value(s) (e)."""
+    return await ConfigTools.get_config(key, session_id)
+
+
+@mcp.tool()
+async def set_config(key: str, value: Any, session_id: Optional[str] = None) -> bool:
+    """Set configuration value (e key=value)."""
+    return await ConfigTools.set_config(key, value, session_id)
